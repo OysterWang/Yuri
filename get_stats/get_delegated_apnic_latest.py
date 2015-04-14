@@ -130,5 +130,5 @@ def download(url, output, blocks=1, proxies={}):
 
 if __name__ == '__main__':
     url = "ftp://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
-    output = 'delegated-apnic-latest'
+    output = '../stats/delegated-apnic-latest'
     download( url, output, blocks=1, proxies={} )

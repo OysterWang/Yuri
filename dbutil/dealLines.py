@@ -49,7 +49,7 @@ if __name__ == '__main__':
 	starttime =time.clock()
 
 	dealLines = DealLines(url,lineType)
-	newlines = dealLines.extractNewlines(dealLines.getFileLines(),10)
+	newlines = dealLines.extractNewlines(dealLines.getFileLines(),0)
 
 	endtime = time.clock()
 

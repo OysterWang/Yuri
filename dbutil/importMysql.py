@@ -1,11 +1,18 @@
 import mysql.connector
 import sys,os
 import time
+import sys
+sys.path.append('..')
 from dealLines import DealLines
+from configs import getConfig
 
-select_sql = "SELECT * FROM delegate_apnic_latest"
+config = getConfig.Config()
+user = config.get("Mysql","user")
+password = config.get("Mysql","password")
+host = config.get("Mysql","host")
+db = config.get("Mysql","db")
 
-cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
+cnx = mysql.connector.connect(user=user, password=password, host=host, database=db)
 cursor = cnx.cursor()
 
 url = "../stats/delegated-apnic-latest"
@@ -25,7 +32,8 @@ for line in newlines:
     sql = "INSERT INTO delegate_apnic_latest VALUES ('{}', '{}', '{}', '{}', '{}', {}, '{}', '{}')".format('', myset[0], myset[1], myset[2], myset[3], myset[4], myset[5], myset[6])
     print (sql)
     try:
-        cursor.execute(sql)
+        pass
+        #cursor.execute(sql)
     except mysql.connector.Error as err:
         print("insert table 'delegate_apnic_latest' -- failed.")
         print("Error: {}".format(err.msg))

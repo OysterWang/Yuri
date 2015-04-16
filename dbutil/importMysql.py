@@ -9,7 +9,7 @@ host = '123.57.58.85'
 db = 'yuri'
 
 select_sql = "SELECT * FROM delegate_apnic_latest"
- 
+
 cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
 cursor = cnx.cursor()
 

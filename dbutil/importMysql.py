@@ -32,8 +32,7 @@ for line in newlines:
     sql = "INSERT INTO delegate_apnic_latest VALUES ('{}', '{}', '{}', '{}', '{}', {}, '{}', '{}')".format('', myset[0], myset[1], myset[2], myset[3], myset[4], myset[5], myset[6])
     print (sql)
     try:
-        pass
-        #cursor.execute(sql)
+        cursor.execute(sql)
     except mysql.connector.Error as err:
         print("insert table 'delegate_apnic_latest' -- failed.")
         print("Error: {}".format(err.msg))

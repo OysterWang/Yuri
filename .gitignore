@@ -43,3 +43,4 @@ Temporary Items
 .apdisk
 configs/configs.ini
 stats/delegated-apnic-latest
+*.pyc

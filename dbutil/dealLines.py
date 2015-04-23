@@ -42,7 +42,7 @@ class DealLines(object):
 			prog = re.compile(pattern)
 		return prog
 
-	def extractNewlines(self,originLines,needNum):
+	def extractNewlines(self, originLines, needNum):
 		"""extractNewlines
 		匹配中的CN ipv4加入到newlines中
 

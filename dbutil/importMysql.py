@@ -3,6 +3,8 @@ import sys,os
 import time
 import sys
 sys.path.append('..')
+
+from analysis import analysis
 from dealLines import DealLines
 from configs import getConfig
 
@@ -20,6 +22,7 @@ lineType = "APNIC_CN_IPv4"
 
 dealLines = DealLines(url,lineType)
 newlines = dealLines.extractNewlines(dealLines.getFileLines(),0)
+analysis = analysis.Analysis()
 
 #INSERT INTO `delegate_apnic_latest` VALUES 
 #('', 'apnic', 'CN', 'ipv4', '103.251.248.0', '1024', '2013-08-07 00:00:00', 'allocated');
@@ -27,9 +30,11 @@ newlines = dealLines.extractNewlines(dealLines.getFileLines(),0)
 starttime =time.clock()
 print ("Begin to import into Mysql.")
 
+
+
 for line in newlines:
     myset = line.strip().split("|")
-    sql = "INSERT INTO delegate_apnic_latest VALUES ('{}', '{}', '{}', '{}', '{}', {}, '{}', '{}')".format('', myset[0], myset[1], myset[2], myset[3], myset[4], myset[5], myset[6])
+    sql = "INSERT INTO delegate_apnic_latest VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}')".format('', myset[0], myset[1], myset[2], myset[3], analysis.anaSubnetMask(analysis.anaMaskNum(int(myset[4]))), myset[4], myset[5], myset[6])
     print (sql)
     try:
         cursor.execute(sql)

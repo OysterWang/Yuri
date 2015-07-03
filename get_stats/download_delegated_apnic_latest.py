@@ -117,7 +117,7 @@ def islive(tasks):
     return False
 
 class GetStats(object):
-    """Download class
+    """多线程下载类
     """
    
     def download(self, url, output, thread_num, proxies):
@@ -127,7 +127,7 @@ class GetStats(object):
 
         Args:
             url:下载url
-            output:输出文件名（不带路径默认在本文件夹中生成）
+            output:下载生成文件名（不带路径默认在本文件夹中生成）
             thread_num:创建线程数
             proxies:代理ip（比如proxies = {'http': 'http://x.x.x.x:8080'}）
 
@@ -177,6 +177,6 @@ class GetStats(object):
 
 if __name__ == '__main__':
     url = "ftp://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
-    output = '../stats/delegated-apnic-latest'
+    output = '../stats/delegated-apnic-latest.txt'
     getStats = GetStats()
     getStats.download(url, output, 1, {})

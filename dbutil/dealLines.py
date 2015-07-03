@@ -6,7 +6,7 @@ import time
 
 class DealLines(object):
 	"""DealLines
-	处理delegated-apnic-latest，得到符合条件的条目list
+	处理delegated-apnic-latest.txt，得到符合条件的条目list，要apnic|CN|ipv4|
 	"""
 	def __init__(self,url,lineType):
 		self.url = url
@@ -14,7 +14,7 @@ class DealLines(object):
 
 	def getFileLines(self):
 		"""Get origin lines
-		读取下载好的delegated-apnic-latest到lines中。
+		读取下载好的delegated-apnic-latest.txt到lines中。
 
 		Args:
 
@@ -56,26 +56,34 @@ class DealLines(object):
 		newlines = []
 		prog = self.useRegex()
 		flag = 0
-		for line in originLines:
-			if prog.match(line):	#匹配中的line
-				print (line.strip())
-				newlines.append(line)	#加入到newlines中
-				flag += 1
-				if needNum <= 0:
-					continue
-				elif flag>=needNum:
-					print ("Need %d lines." %needNum)
-					break
-		return newlines
+
+		if needNum <= 0:	#抽取全部符合条件的
+			for line in originLines:
+				if prog.match(line):
+					print("%d : %s" %(flag, line.strip()))
+					newlines.append(line)	##匹配中的line加入到newlines中
+					flag += 1
+			print ("Need all lines.")
+			return newlines
+		elif needNum > 0:	#抽取needNum条符合条件的
+			for line in originLines:
+				if prog.match(line):	
+					print("%d : %s" %(flag, line.strip()))
+					newlines.append(line)	##匹配中的line加入到newlines中
+					flag += 1
+					if flag>=needNum:
+						print ("Need %d lines." %needNum)
+						break
+			return newlines
 
 if __name__ == '__main__':
-	url = "../stats/delegated-apnic-latest"
+	url = "../stats/delegated-apnic-latest.txt"
 	lineType = "APNIC_CN_IPv4"
 	
 	starttime =time.clock()
 
 	dealLines = DealLines(url,lineType)
-	newlines = dealLines.extractNewlines(dealLines.getFileLines(),0)
+	newlines = dealLines.extractNewlines(dealLines.getFileLines(),0)	#得到符合条件的条目
 
 	endtime = time.clock()
 

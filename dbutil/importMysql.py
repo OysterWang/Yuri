@@ -7,21 +7,30 @@ sys.path.append('..')
 from analysis import analysis
 from dbutil import dealLines
 from configs import getConfig
+from logutil import makelog
 
 class ImportMysql(object):
-    dl = None
+    """
+    导入mysql类。
+    连接数据库部分用##注释。
+    导入前需要extractNewlines方法抽取符合条件的条目，并用analysis类计算相应子网掩码。最后数据导入mysql中。
+    """
+
     def __init__(self):
+        
         config = getConfig.Config()
         user = config.get("Mysql","user")
         password = config.get("Mysql","password")
         host = config.get("Mysql","host")
         db = config.get("Mysql","db")
-        self.cnx = mysql.connector.connect(user=user, password=password, host=host, database=db)
-        self.cursor = self.cnx.cursor()
+        self.ml = makelog.Makelog()
+        self.dl = None
+        ##self.cnx = mysql.connector.connect(user=user, password=password, host=host, database=db)
+        ##self.cursor = self.cnx.cursor()
 
     def extractNewlines(self, file_url, lineType):
         dl = dealLines.DealLines(file_url, lineType)
-        newlines = dl.extractNewlines(dl.getFileLines(),0)   #后边的数字为想要多少行,0为所有
+        newlines = dl.extractNewlines(dl.getFileLines(), 0)   #后边的数字是想要多少符合条件的行,0为所有
         return newlines
 
     def importToMysql(self, file_url, lineType):        
@@ -37,16 +46,18 @@ class ImportMysql(object):
             myset = line.strip().split("|")
             sql = "INSERT INTO delegate_apnic_latest VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}')".format('', myset[0], myset[1], myset[2], myset[3], ana.anaSubnetMask(ana.anaMaskNum(int(myset[4]))), myset[4], myset[5], myset[6])
             print (sql)
+            self.ml.debug(sql)
             try:
-                self.cursor.execute(sql)
+                pass
+                ##self.cursor.execute(sql)   //插入mysql
             except mysql.connector.Error as err:
                 print("insert table 'delegate_apnic_latest' -- failed.")
                 print("Error: {}".format(err.msg))
                 sys.exit()
 
-        self.cnx.commit()
-        self.cursor.close()
-        self.cnx.close()
+        ##self.cnx.commit()
+        ##self.cursor.close()
+        ##self.cnx.close()
         endtime = time.clock()
         print ("%d rows." %len(newlines))
         print ("Total cost time: %.3f seconds" %(endtime - starttime))
@@ -62,7 +73,7 @@ except mysql.connector.Error as err:
     sys.exit()
 '''
 if __name__ == '__main__':
-    file_url = "../stats/delegated-apnic-latest"
+    file_url = "../stats/delegated-apnic-latest.txt"
     lineType = "APNIC_CN_IPv4"
     im = ImportMysql()
     im.importToMysql(file_url, lineType)

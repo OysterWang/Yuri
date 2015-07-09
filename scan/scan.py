@@ -4,7 +4,7 @@
 import socket, sys, thread, time
 
 openPortNum = 0
-socket.setdefaulttimeout(3)
+socket.setdefaulttimeout(2)
 
 def usage():
     print '''Usage:

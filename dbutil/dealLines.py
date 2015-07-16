@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import re
 import time
 
@@ -77,7 +76,7 @@ class DealLines(object):
 			return newlines
 
 if __name__ == '__main__':
-	url = "../stats/delegated-apnic-latest.txt"
+	url = "../data_ref/delegated-apnic-latest.txt"
 	lineType = "APNIC_CN_IPv4"
 	
 	starttime =time.clock()

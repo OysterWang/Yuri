@@ -1,13 +1,13 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import mysql.connector
-import sys,os
 import time
-import sys
-sys.path.append('..')
 
-from analysis import analysis
-from dbutil import dealLines
-from configs import getConfig
-from logutil import makelog
+#导入相关包
+import analysis.analysis
+import dbutil.dealLines
+import configs.getConfig
+import logutil.makelog
 
 class ImportMysql(object):
     """
@@ -17,19 +17,19 @@ class ImportMysql(object):
     """
 
     def __init__(self):
-        
-        config = getConfig.Config()
+        config = configs.getConfig.Config()
         user = config.get("Mysql","user")
         password = config.get("Mysql","password")
         host = config.get("Mysql","host")
         db = config.get("Mysql","db")
-        self.ml = makelog.Makelog()
+        self.ml = logutil.makelog.Makelog()
         self.dl = None
+        ##插入mysql，无数据库时注释掉
         ##self.cnx = mysql.connector.connect(user=user, password=password, host=host, database=db)
         ##self.cursor = self.cnx.cursor()
 
     def extractNewlines(self, file_url, lineType):
-        dl = dealLines.DealLines(file_url, lineType)
+        dl = dbutil.dealLines.DealLines(file_url, lineType)
         newlines = dl.extractNewlines(dl.getFileLines(), 0)   #后边的数字是想要多少符合条件的行,0为所有
         return newlines
 
@@ -38,7 +38,7 @@ class ImportMysql(object):
         #('', 'apnic', 'CN', 'ipv4', '103.251.248.0', '1024', '2013-08-07 00:00:00', 'allocated');
 
         starttime =time.clock()
-        ana = analysis.Analysis()
+        ana = analysis.analysis.Analysis()
         newlines = self.extractNewlines(file_url, lineType)
 
         print ("Begin to import into Mysql.")
@@ -49,12 +49,12 @@ class ImportMysql(object):
             self.ml.debug(sql)
             try:
                 pass
-                ##self.cursor.execute(sql)   //插入mysql
+                ##self.cursor.execute(sql)   //插入mysql，无数据库时注释掉
             except mysql.connector.Error as err:
                 print("insert table 'delegate_apnic_latest' -- failed.")
                 print("Error: {}".format(err.msg))
                 sys.exit()
-
+        ##插入mysql，无数据库时注释掉
         ##self.cnx.commit()
         ##self.cursor.close()
         ##self.cnx.close()
@@ -73,7 +73,7 @@ except mysql.connector.Error as err:
     sys.exit()
 '''
 if __name__ == '__main__':
-    file_url = "../stats/delegated-apnic-latest.txt"
+    file_url = "../data_ref/delegated-apnic-latest.txt"
     lineType = "APNIC_CN_IPv4"
     im = ImportMysql()
     im.importToMysql(file_url, lineType)

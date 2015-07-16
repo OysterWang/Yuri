@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import math
+
 class Analysis(object):
 	"""
 	根据得到的apnic文件中子网包含的host数量，推算出此条网络的子网掩码

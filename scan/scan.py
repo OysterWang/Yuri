@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import socket, sys, thread, time
 
 openPortNum = 0

@@ -119,7 +119,8 @@ def islive(tasks):
 class GetStats(object):
     """多线程下载类
     """
-   
+    def __init__(self):
+        pass
     def download(self, url, output, thread_num, proxies):
         """Download file.
 
@@ -177,6 +178,6 @@ class GetStats(object):
 
 if __name__ == '__main__':
     url = "ftp://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
-    output = '../stats/delegated-apnic-latest.txt'
+    output = '../data_ref/delegated-apnic-latest.txt'
     getStats = GetStats()
     getStats.download(url, output, 1, {})
